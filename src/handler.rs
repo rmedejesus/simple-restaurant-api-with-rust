@@ -5,7 +5,7 @@ use crate::{
 use rocket::{
     delete, get, http::Status, post, response::status::Custom, serde::json::Json, State,
 };
-use rand::Rng;
+use rand::{distributions::Alphanumeric, Rng};
 use itertools::Itertools;
 
 #[allow(non_snake_case)]
@@ -41,6 +41,14 @@ pub async fn create_menu_item_handler(
                 return Err(Custom(Status::Conflict, Json(error_response)));
             }
         }
+
+        let id: String = rand::thread_rng()
+            .sample_iter(&Alphanumeric)
+            .take(5)
+            .map(char::from)
+            .collect();
+
+        menuRequest.id = Some(id);
 
         if menuRequest.prepareTime.is_some() {
             let mut rng = rand::thread_rng();
@@ -87,16 +95,16 @@ pub async fn get_menus_handler(
 }
 
 #[allow(non_snake_case)]
-#[get("/menus/<name>?<tableNumber>")]
+#[get("/menus/<id>?<tableNumber>")]
 pub async fn get_menu_handler(
-    name: &str,
+    id: String,
     tableNumber: usize,
     data: &State<AppState>,
 ) -> Result<Json<SingleMenuResponse>, Custom<Json<StatusResponse>>> {
     let vec = data.simple_restaurant_menu_db.lock().unwrap();
 
     for menu in vec.iter() {
-        if menu.name == name && menu.tableNumber == tableNumber {
+        if menu.id == Some(id.clone()) && menu.tableNumber == tableNumber {
             let json_response = SingleMenuResponse {
                 status: "success".to_string(),
                 data: MenuData { menu: menu.clone() },
@@ -108,27 +116,27 @@ pub async fn get_menu_handler(
 
     let error_response = StatusResponse {
         status: "fail".to_string(),
-        message: format!("Menu item with name '{}' not found on table number {}", name, tableNumber),
+        message: format!("Menu item with id '{}' not found on table number {}", id, tableNumber),
     };
     Err(Custom(Status::NotFound, Json(error_response)))
 }
 
 #[allow(non_snake_case)]
-#[delete("/menus/<name>?<tableNumber>")]
+#[delete("/menus/<id>?<tableNumber>")]
 pub async fn delete_menu_item_handler(
-    name: &str,
+    id: String,
     tableNumber: usize,
     data: &State<AppState>,
 ) -> Result<Json<StatusResponse>, Custom<Json<StatusResponse>>> {
     let mut vec = data.simple_restaurant_menu_db.lock().unwrap();
 
     for menu in vec.iter_mut() {
-        if menu.name == name && menu.tableNumber == tableNumber {
-            vec.retain(|menu| menu.name != name);
+        if menu.id == Some(id.clone()) && menu.tableNumber == tableNumber {
+            vec.retain(|menu| menu.id != Some(id.to_owned()));
 
             let success_response = StatusResponse {
                 status: "success".to_string(),
-                message: format!("Menu item with name '{}' has been removed on table number {}", name, tableNumber),
+                message: format!("Menu item with id '{}' has been removed on table number {}", id, tableNumber),
             };
 
             return Ok(Json(success_response));
@@ -137,7 +145,7 @@ pub async fn delete_menu_item_handler(
 
     let error_response = StatusResponse {
         status: "fail".to_string(),
-        message: format!("Menu item with name '{}' not found on table number {}", name, tableNumber),
+        message: format!("Menu item with id '{}' not found on table number {}", id, tableNumber),
     };
     Err(Custom(Status::NotFound, Json(error_response)))
 }

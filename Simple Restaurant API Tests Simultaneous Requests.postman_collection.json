@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "258f4cdc-07c5-472a-8548-e55ff86b6301",
-		"name": "Simple Restaurant API Tests Postman Collection",
+		"name": "Simple Restaurant API Tests Simultaneous Requests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "12606296"
 	},
@@ -218,108 +218,12 @@
 			"response": []
 		},
 		{
-			"name": "get single menu from table 4",
+			"name": "get table 2",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/menus/test?tableNumber=4",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"menus",
-						"test"
-					],
-					"query": [
-						{
-							"key": "tableNumber",
-							"value": "4"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get single menu from table 5",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://127.0.0.1:8000/menus/test?tableNumber=5",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"menus",
-						"test"
-					],
-					"query": [
-						{
-							"key": "tableNumber",
-							"value": "5"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete single menu from table 2",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://127.0.0.1:8000/menus/test?tableNumber=2",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"menus",
-						"test"
-					],
-					"query": [
-						{
-							"key": "tableNumber",
-							"value": "2"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "create menu with limit of specified table numbers",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "[\r\n    {\r\n        \"name\": \"test\",\r\n        \"tableNumber\": 7,\r\n        \"cookingTime\": \"5 minutes\",\r\n        \"prepareTime\": 5\r\n    },\r\n    {\r\n        \"name\": \"test1\",\r\n        \"tableNumber\": 7,\r\n        \"cookingTime\": \"5 minutes\"\r\n    },\r\n    {\r\n        \"name\": \"test2\",\r\n        \"tableNumber\": 8,\r\n        \"cookingTime\": \"5 minutes\"\r\n    }\r\n]\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/menus?limit=1",
+					"raw": "http://127.0.0.1:8000/menus?tableNumber=2",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -333,8 +237,64 @@
 					],
 					"query": [
 						{
-							"key": "limit",
-							"value": "1"
+							"key": "tableNumber",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get table 4",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/menus?tableNumber=4",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"menus"
+					],
+					"query": [
+						{
+							"key": "tableNumber",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get table 5",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/menus?tableNumber=5",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"menus"
+					],
+					"query": [
+						{
+							"key": "tableNumber",
+							"value": "5"
 						}
 					]
 				}
